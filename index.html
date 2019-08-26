@@ -35,13 +35,22 @@
 
 <body>
 
-<!-- Load d3.js -->
+<!-- Load d3.js & plugin-->
 <script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
+<!-- Create a div where the graph will take place -->
+<div id="div_template"></div>
+
 <script>
+
+    // Set the dimensions and margins of the diagram
+    var margin = {top: 20, right: 90, bottom: 30, left: 90},
+        width = 1960 - margin.left - margin.right,
+        height = 1300 - margin.top - margin.bottom;
 
 
     // Define the div for the tooltip
@@ -72,27 +81,53 @@
     });
 
 
-    // Set the dimensions and margins of the diagram
-    var margin = {top: 20, right: 90, bottom: 30, left: 90},
-        width = 1960 - margin.left - margin.right,
-        height = 1300 - margin.top - margin.bottom;
-
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#div_template").append("svg")
         .attr("width", width + margin.right + margin.left)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate("
             + margin.left + "," + margin.top + ")");
 
-    var i = 0,
+    let tooltip = d3.select("#div_template")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px");
+
+    var mouseover = function (d) {
+        tooltip
+            .style("opacity", 1)
+        d3.select(this)
+            .style("stroke", "black")
+            .style("opacity", 1)
+    }
+    var mousemove = function (d) {
+        tooltip
+            .html(d.data.tooltip)
+            .style("top", (event.pageY) + "px")
+            .style("left", (event.pageX) + "px");
+    }
+    var mouseleave = function (d) {
+        tooltip
+            .style("opacity", 0)
+        d3.select(this)
+            .style("stroke", getUserStateColor(d, "steelblue"))
+            .style("opacity", 0.8)
+    }
+
+    let i = 0,
         duration = 750,
         root;
 
     // declares a tree layout and assigns the size
-    var treemap = d3.tree().size([height, width]);
+    let treemap = d3.tree().size([height, width]);
 
     // Assigns parent, children, height, depth
     root = d3.hierarchy(treeData, function (d) {
@@ -159,7 +194,7 @@
         // Normalize for fixed-depth.
         nodes.forEach(function (d) {
             let roadmap = roadmapNodes.get(d.data.id);
-            mergeUserNodeData(d.data,roadmap);
+            mergeUserNodeData(d.data, roadmap);
             d.y = d.depth * 180
         });
 
@@ -204,7 +239,7 @@
             });
 
         // UPDATE
-        var nodeUpdate = nodeEnter.merge(node);
+        let nodeUpdate = nodeEnter.merge(node);
 
         // Transition to the proper position for the node
         nodeUpdate.transition()
@@ -223,27 +258,13 @@
                 return d._children ? "PLUM" : getUserStateColor(d, "steelblue");
             })
             .attr('cursor', 'pointer')
-            .on("mouseover", function (d) {
-                div.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                div.html(function (d1) {
-                    if (d.data != null && d.data.tooltip != null)
-                        return d.data.tooltip;
-                    return "unknown";
-                })
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-            .on("mouseout", function (d) {
-                div.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave);
 
 
         // Remove any exiting nodes
-        var nodeExit = node.exit().transition()
+        let nodeExit = node.exit().transition()
             .duration(duration)
             .attr("transform", function (d) {
                 return "translate(" + source.y + "," + source.x + ")";
@@ -262,13 +283,13 @@
         // ****************** links section ***************************
 
         // Update the links...
-        var link = svg.selectAll('path.link')
+        let link = svg.selectAll('path.link')
             .data(links, function (d) {
                 return d.id;
             });
 
         // Enter any new links at the parent's previous position.
-        var linkEnter = link.enter().insert('path', "g")
+        let linkEnter = link.enter().insert('path', "g")
             .attr("class", "link")
             .attr('d', function (d) {
                 var o = {x: source.x0, y: source.y0}
@@ -276,7 +297,7 @@
             });
 
         // UPDATE
-        var linkUpdate = linkEnter.merge(link);
+        let linkUpdate = linkEnter.merge(link);
 
         // Transition back to the parent element position
         linkUpdate.transition()
@@ -286,10 +307,10 @@
             });
 
         // Remove any exiting links
-        var linkExit = link.exit().transition()
+        let linkExit = link.exit().transition()
             .duration(duration)
             .attr('d', function (d) {
-                var o = {x: source.x, y: source.y}
+                let o = {x: source.x, y: source.y}
                 return diagonal(o, o)
             })
             .remove();
