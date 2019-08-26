@@ -1,0 +1,23 @@
+{
+  "name": "roadmap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "d3": "^5.11.0",
+    "d3-node": "^2.2.0",
+    "topojson": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/d3": "^5.7.2",
+    "svg2png": "^4.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

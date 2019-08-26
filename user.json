@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    {
+      "id": "object_oriented",
+      "state": "done"
+
+    },
+    {
+      "id": "spring_batch",
+      "state": "done"
+
+    },
+    {
+      "id": "spring_cache",
+      "state": "done"
+
+    },
+
+    {
+      "id": "hibernate",
+      "state": "start"
+    },
+    {
+      "id": "maven",
+      "state": "done"
+    }
+  ]
+}
