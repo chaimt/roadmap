@@ -55,7 +55,9 @@
     {
       "id": "spring_batch",
       "name": "Batch",
-      "size": 3812
+      "size": 3812,
+      "tooltip": "A lightweight, comprehensive batch framework designed to enable the development of robust batch applications vital for the daily operations of enterprise systems.",
+      "links": ["https://spring.io/projects/spring-batch"]
     },
     {
       "id": "spring_cache",
@@ -256,6 +258,18 @@
     {
       "id": "spark",
       "name": "Spark"
+    },
+    {
+      "id": "junior",
+      "name": "Junior"
+    },
+    {
+      "id": "senior",
+      "name": "Senior"
+    },
+    {
+      "id": "architect",
+      "name": "Architect"
     }
 
 
