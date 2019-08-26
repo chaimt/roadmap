@@ -48,19 +48,27 @@
     var div = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
-    var userNodes = null;
+    // var userNodes = null;
+    var roadmapNodes = null;
 
 
-    d3.json("user.json", function (error, user) {
+    d3.json("roadmap_data.json", function (error, roadmap) {
         if (error) throw error;
-        userNodes = user.nodes;
-        d3.json("data.json", function (error, flare) {
+        roadmapNodes = new Map(roadmap.nodes.map(i => [i.id, i]));
+
+        d3.json("user.json", function (error, user) {
             if (error) throw error;
-            root = d3.hierarchy(flare);
-            root.x0 = 0;
-            root.y0 = 0;
-            update(root);
-        });
+            let userNodes = new Map(user.nodes.map(i => [i.id, i]));
+
+            mergeUserNodesData(roadmapNodes, userNodes);
+            d3.json("profile_tree.json", function (error, treeData) {
+                if (error) throw error;
+                root = d3.hierarchy(treeData);
+                root.x0 = 0;
+                root.y0 = 0;
+                update(root);
+            });
+        })
     });
 
 
@@ -108,55 +116,63 @@
     }
 
     function getUserStateColor(d, def) {
-        let dataNode = getUserData(d.data.id);
+        let dataNode = d.data;
         if (dataNode != null) {
-            if (dataNode.state === "done")
-                return "green";
-            else if (dataNode.state === "start")
-                return "Aqua";
-            return "black";
+            if (dataNode.hasOwnProperty("state")) {
+                if (dataNode.state === "done")
+                    return "green";
+                else if (dataNode.state === "start")
+                    return "Aqua";
+                return "black";
+            }
         }
         return def;
     }
 
-    function getUserData(nodeId) {
-        if (nodeId != null) {
-            for (let i = 0; i < userNodes.length; i++) {
-                let obj = userNodes[i];
-                if (nodeId === obj.id) {
-                    return obj;
-                }
-                console.log(obj.id);
+    function mergeUserNodesData(roadmap, user) {
+        for (let [id, roadmapItem] of roadmap) {
+            let userItem = user.get(id);
+            mergeUserNodeData(roadmapItem, userItem);
+        }
+    }
 
+    function mergeUserNodeData(roadmap, user) {
+        if (user != null) {
+            let key;
+            for (key in user) {
+                if (user.hasOwnProperty(key)) {
+                    roadmap[key] = user[key];
+                }
             }
         }
-        return null;
     }
 
     function update(source) {
 
         // Assigns the x and y position for the nodes
-        var treeData = treemap(root);
+        let treeData = treemap(root);
 
         // Compute the new tree layout.
-        var nodes = treeData.descendants(),
+        let nodes = treeData.descendants(),
             links = treeData.descendants().slice(1);
 
         // Normalize for fixed-depth.
         nodes.forEach(function (d) {
+            let roadmap = roadmapNodes.get(d.data.id);
+            mergeUserNodeData(d.data,roadmap);
             d.y = d.depth * 180
         });
 
         // ****************** Nodes section ***************************
 
         // Update the nodes...
-        var node = svg.selectAll('g.node')
+        let node = svg.selectAll('g.node')
             .data(nodes, function (d) {
                 return d.id || (d.id = ++i);
             });
 
         // Enter any new modes at the parent's previous position.
-        var nodeEnter = node.enter().append('g')
+        let nodeEnter = node.enter().append('g')
             .attr('class', 'node')
             .attr("transform", function (d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
@@ -204,7 +220,7 @@
                 return getUserStateColor(d, "#fff");
             })
             .style("stroke", function (d) {
-                return d._children ?  "PLUM" : getUserStateColor(d, "steelblue");
+                return d._children ? "PLUM" : getUserStateColor(d, "steelblue");
             })
             .attr('cursor', 'pointer')
             .on("mouseover", function (d) {
