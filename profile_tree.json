@@ -46,7 +46,7 @@
           ]
         },
         {
-          "id": "basic_spring",
+          "id": "spring",
           "children": [
             {
               "id": "spring_batch"
@@ -63,7 +63,7 @@
           "id": "hibernate"
         },
         {
-          "id": "basic_database",
+          "id": "database",
           "children": [
             {
               "id": "sql"
@@ -189,7 +189,7 @@
           ]
         },
         {
-          "id": "bigdata_db_types",
+          "id": "db_types",
           "children": [
             {
               "id": "columndb",

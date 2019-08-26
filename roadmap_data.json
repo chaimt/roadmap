@@ -21,6 +21,14 @@
       "name": "Imperative"
     },
     {
+      "id": "declarative",
+      "name": "Declarative"
+    },
+    {
+      "id": "object_oriented",
+      "name": "Object Oriented"
+    },
+    {
       "id": "functional",
       "name": "Functional"
     },
@@ -204,6 +212,52 @@
     {
       "id": "storm",
       "name": "Storm"
+    },
+    {
+      "id": "file_format",
+      "name": "File Format"
+    },
+    {
+      "id": "spring",
+      "name": "Spring"
+    },
+    {
+      "id": "build_systems",
+      "name": "Build Systems"
+    },
+    {
+      "id": "database",
+      "name": "Database"
+    },
+    {
+      "id": "db_types",
+      "name": "DB Types"
+    },
+    {
+      "id": "queue",
+      "name": "Queues"
+    },
+    {
+      "id": "columndb",
+      "name": "Column DB"
+    },
+    {
+      "id": "opensource_db",
+      "name": "Opensource DB"
+    },
+    {
+      "id": "google_db",
+      "name": "Google DB"
+    },
+    {
+      "id": "data_processing",
+      "name": "Data Processing"
+    },
+    {
+      "id": "spark",
+      "name": "Spark"
     }
+
+
   ]
 }
