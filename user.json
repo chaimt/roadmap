@@ -1,5 +1,5 @@
 {
-  "nodes": [
+  "children": [
     {
       "id": "backend",
       "state": "done"

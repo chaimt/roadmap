@@ -41,6 +41,103 @@
 <div id="div_template"></div>
 
 <script>
+    function contextMenu() {
+        var height,
+            width,
+            margin = 0.1, // fraction of width
+            items = [],
+            rescale = false,
+            style = {
+                'rect': {
+                    'mouseout': {
+                        'fill': 'rgb(244,244,244)',
+                        'stroke': 'white',
+                        'stroke-width': '1px'
+                    },
+                    'mouseover': {
+                        'fill': 'rgb(200,200,200)'
+                    }
+                },
+                'text': {
+                    'fill': 'steelblue',
+                    'font-size': '13'
+                }
+            };
+
+        function menu(x, y) {
+            d3.select('.context-menu').remove();
+            scaleItems();
+
+            // Draw the menu
+            d3.select('svg')
+                .append('g').attr('class', 'context-menu')
+                .selectAll('tmp')
+                .data(items).enter()
+                .append('g').attr('class', 'menu-entry')
+                .style({'cursor': 'pointer'})
+                .on('mouseover', function(){
+                    d3.select(this).select('rect').style(style.rect.mouseover) })
+                .on('mouseout', function(){
+                    d3.select(this).select('rect').style(style.rect.mouseout) });
+
+            d3.selectAll('.menu-entry')
+                .append('rect')
+                .attr('x', x)
+                .attr('y', function(d, i){ return y + (i * height); })
+                .attr('width', width)
+                .attr('height', height)
+                .style(style.rect.mouseout);
+
+            d3.selectAll('.menu-entry')
+                .append('text')
+                .text(function(d){ return d; })
+                .attr('x', x)
+                .attr('y', function(d, i){ return y + (i * height); })
+                .attr('dy', height - margin / 2)
+                .attr('dx', margin)
+                .style(style.text);
+
+            // Other interactions
+            d3.select('body')
+                .on('click', function() {
+                    d3.select('.context-menu').remove();
+                });
+
+        }
+
+        menu.items = function(e) {
+            if (!arguments.length) return items;
+            for (i in arguments) items.push(arguments[i]);
+            rescale = true;
+            return menu;
+        }
+
+        // Automatically set width, height, and margin;
+        function scaleItems() {
+            if (rescale) {
+                d3.select('svg').selectAll('tmp')
+                    .data(items).enter()
+                    .append('text')
+                    .text(function(d){ return d; })
+                    .style(style.text)
+                    .attr('x', -1000)
+                    .attr('y', -1000)
+                    .attr('class', 'tmp');
+                var z = d3.selectAll('.tmp')[0]
+                    .map(function(x){ return x.getBBox(); });
+                width = d3.max(z.map(function(x){ return x.width; }));
+                margin = margin * width;
+                width =  width + 2 * margin;
+                height = d3.max(z.map(function(x){ return x.height + margin / 2; }));
+
+                // cleanup
+                d3.selectAll('.tmp').remove();
+                rescale = false;
+            }
+        }
+
+        return menu;
+    }
 
     // Set the dimensions and margins of the diagram
     var margin = {top: 20, right: 90, bottom: 30, left: 90},
@@ -52,17 +149,33 @@
     var div = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
-    // var userNodes = null;
+
     var roadmapNodes = null;
 
+    function loadDataNodes(source) {
+        let data = new Array()
+        if (source != null){
+            source.forEach(i => {
+                if (i.children != null){
+                    sub = loadDataNodes(i.children);
+                    if (sub.length>0){
+                        data.push(sub);
+                    }
+                }
+                data.push(i);
+            });
+        }
+        return data.flat(1);
+    }
 
     d3.json("roadmap_data.json", function (error, roadmap) {
         if (error) throw error;
-        roadmapNodes = new Map(roadmap.nodes.map(i => [i.id, i]));
+        arr = loadDataNodes(roadmap.children);
+        roadmapNodes = new Map(arr.map(i => [i.id, i]));
 
         d3.json("user.json", function (error, user) {
             if (error) throw error;
-            let userNodes = new Map(user.nodes.map(i => [i.id, i]));
+            let userNodes = new Map(user.children.map(i => [i.id, i]));
 
             mergeUserNodesData(roadmapNodes, userNodes);
             d3.json("profile_tree.json", function (error, treeData) {
@@ -179,8 +292,9 @@
         }
     }
 
-    function update(source) {
 
+    function update(source) {
+        let buildMenu = contextMenu().items('first item', 'second option', 'aa, man');
         // Assigns the x and y position for the nodes
         let treeData = treemap(root);
 
@@ -209,7 +323,11 @@
             .attr("transform", function (d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
-            .on('click', click);
+            .on('contextmenu', function(){
+                d3.event.preventDefault();
+                buildMenu(d3.mouse(this)[0], d3.mouse(this)[1]);
+            });
+            // .on('click', click);
 
         // Add Circle for the nodes
         nodeEnter.append('circle')
@@ -254,10 +372,18 @@
             .style("stroke", function (d) {
                 return d._children ? "PLUM" : getUserStateColor(d, "steelblue");
             })
-            .attr('cursor', 'pointer')
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave);
+            .on('contextmenu', function(){
+                d3.event.preventDefault();
+                a = event.pageY
+                b = event.pageX
+                c = d3.mouse(this)
+                buildMenu(d3.mouse(this)[0], d3.mouse(this)[1]);
+            });
+
+            // .attr('cursor', 'pointer')
+            // .on("mouseover", mouseover)
+            // .on("mousemove", mousemove)
+            // .on("mouseleave", mouseleave);
 
 
         // Remove any exiting nodes
