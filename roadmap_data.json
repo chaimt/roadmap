@@ -9,20 +9,35 @@
       "tags": []
     },
     {
-      "id": "application",
-      "name": "Application"
+      "id": "profiles",
+      "name": "Profiles",
+      "children": [
+        {
+          "id": "application",
+          "name": "Application"
+        }
+      ]
     },
     {
       "id": "paradigma",
-      "name": "Paradigma"
-    },
-    {
-      "id": "imperative",
-      "name": "Imperative"
-    },
-    {
-      "id": "declarative",
-      "name": "Declarative"
+      "name": "Paradigma",
+      "children": [
+        {
+          "id": "imperative",
+          "name": "Imperative",
+          "children": []
+        },
+        {
+          "id": "declarative",
+          "name": "Declarative",
+          "children": [
+            {
+              "id": "regex",
+              "name": "RegEx"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "object_oriented",
@@ -31,26 +46,6 @@
     {
       "id": "functional",
       "name": "Functional"
-    },
-    {
-      "id": "regex",
-      "name": "RegEx"
-    },
-    {
-      "id": "maven",
-      "name": "Maven"
-    },
-    {
-      "id": "gradle",
-      "name": "Gradle"
-    },
-    {
-      "id": "sbt",
-      "name": "SBT"
-    },
-    {
-      "id": "mpn",
-      "name": "MPN"
     },
     {
       "id": "hibernate",
@@ -121,22 +116,6 @@
       "name": "Data Lake"
     },
     {
-      "id": "file_json",
-      "name": "json"
-    },
-    {
-      "id": "file_csv",
-      "name": "csv"
-    },
-    {
-      "id": "file_avro",
-      "name": "avro"
-    },
-    {
-      "id": "file_parquet",
-      "name": "parquet"
-    },
-    {
       "id": "bigquery",
       "name": "BigQuery",
       "size": 3812
@@ -156,7 +135,24 @@
     {
       "id": "file_format",
       "name": "File Formats",
-      "children": []
+      "children": [
+        {
+          "id": "file_json",
+          "name": "json"
+        },
+        {
+          "id": "file_csv",
+          "name": "csv"
+        },
+        {
+          "id": "file_avro",
+          "name": "avro"
+        },
+        {
+          "id": "file_parquet",
+          "name": "parquet"
+        }
+      ]
     },
     {
       "id": "spring",
@@ -193,7 +189,24 @@
     {
       "id": "build_systems",
       "name": "Build Systems",
-      "children": []
+      "children": [
+        {
+          "id": "maven",
+          "name": "Maven"
+        },
+        {
+          "id": "gradle",
+          "name": "Gradle"
+        },
+        {
+          "id": "sbt",
+          "name": "SBT"
+        },
+        {
+          "id": "mpn",
+          "name": "MPN"
+        }
+      ]
     },
     {
       "id": "database",
