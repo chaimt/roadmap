@@ -21,8 +21,6 @@
     div.tooltip {
         position: absolute;
         text-align: center;
-        width: 60px;
-        height: 28px;
         padding: 2px;
         font: 12px sans-serif;
         background: lightsteelblue;
@@ -38,9 +36,6 @@
 <!-- Load d3.js & plugin-->
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
-<!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
 
 <!-- Create a div where the graph will take place -->
 <div id="div_template"></div>
@@ -81,6 +76,7 @@
     });
 
 
+    div.attr("width", "170px");
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
@@ -101,12 +97,13 @@
         .style("border-radius", "5px")
         .style("padding", "5px");
 
+
     var mouseover = function (d) {
         tooltip
             .style("opacity", 1)
         d3.select(this)
             .style("stroke", "black")
-            .style("opacity", 1)
+            .style("opacity", 1);
     }
     var mousemove = function (d) {
         tooltip
