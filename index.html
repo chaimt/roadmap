@@ -29,6 +29,17 @@
         pointer-events: none;
     }
 
+    div.links {
+        position: absolute;
+        text-align: center;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: red;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+
 </style>
 
 <body>
@@ -56,7 +67,7 @@
     function myFunction() {
         let selectTree = document.getElementById("selectTree").value;
         let selectUsers = document.getElementById("selectUsers").value;
-        loadData(selectTree,selectUsers);
+        loadData(selectTree, selectUsers);
     }
 
     var items = [
@@ -66,7 +77,16 @@
                 {
                     label: "links",
                     onClick: function () {
-                        svg.node().style.background = "#ff0000";
+
+                        links.transition()
+                            .duration(200)
+                            .style("opacity", .6);
+                        links.transition()
+                            .duration(800)
+                            .style("opacity", .9);
+                        links.html('<a href= "https://google.com" target="_blank"> click me now</a>')
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px");
                     }
                 },
             ]
@@ -78,21 +98,16 @@
         width = 1960 - margin.left - margin.right,
         height = 1300 - margin.top - margin.bottom;
 
-
-    // Define the div for the tooltip
-    var div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
     var roadmapNodes = null;
 
-    function loadData(treeFile, userFile){
+    function loadData(treeFile, userFile) {
         d3.json("./data/roadmap_data.json").then(function (roadmap) {
             arr = loadDataNodes(roadmap.children);
             roadmapNodes = new Map(arr.map(i => [i.id, i]));
 
             d3.json("./data/" + userFile).then(function (user) {
-                let userNodes = new Map(user.children.map(i => [i.id, i]));
+                arr = loadDataNodes(user.children);
+                let userNodes = new Map(arr.map(i => [i.id, i]));
 
                 mergeUserNodesData(roadmapNodes, userNodes);
                 d3.json("./data/" + treeFile).then(function (treeData) {
@@ -105,10 +120,8 @@
         });
     }
 
-    loadData("profile_tree.json","user_chaim.json");
+    loadData("profile_tree.json", "user_chaim.json");
 
-
-    div.attr("width", "170px");
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
@@ -129,8 +142,20 @@
         .style("border-radius", "5px")
         .style("padding", "5px");
 
+    let links = d3.select("#div_template")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "links")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px");
 
     var mouseover = function (d) {
+        links.transition()
+            .duration(200)
+            .style("opacity", 0);
         tooltip
             .style("opacity", 1)
         d3.select(this)
@@ -138,6 +163,9 @@
             .style("opacity", 1);
     }
     var mousemove = function (d) {
+       links.transition()
+            .duration(200)
+            .style("opacity", 0);
         tooltip
             .html(d.data.tooltip)
             .style("top", (event.pageY) + "px")
@@ -169,7 +197,6 @@
 
 
     function update(source) {
-        // let buildMenu = contextMenu().items('first item', 'second option', 'aa, man');
         // Assigns the x and y position for the nodes
         let treeData = treemap(root);
 
@@ -222,7 +249,7 @@
                 return d.children || d._children ? "end" : "start";
             })
             .text(function (d) {
-                return d.data.name!= null ? d.data.name :  d.data.id + "[missing]";
+                return d.data.name != null ? d.data.name : d.data.id + "[missing]";
             });
 
         // UPDATE
