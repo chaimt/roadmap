@@ -37,11 +37,28 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script type="text/javascript" src="./d3-v4-contextmenu.js"></script>
+<script type="text/javascript" src="./datamodel.js"></script>
 
+<div id="div_file">
+    <select id="selectTree" onchange="myFunction()">
+        <option value="profile_tree.json">Profiles</option>
+        <option value="seniority.json">Seniority</option>
+    </select>
+    <select id="selectUsers" onchange="myFunction()">
+        <option value="user_chaim.json">Chaim</option>
+        <option value="user_yoav.json">Yoav</option>
+    </select>
+</div>
 <!-- Create a div where the graph will take place -->
 <div id="div_template"></div>
 
 <script>
+    function myFunction() {
+        let selectTree = document.getElementById("selectTree").value;
+        let selectUsers = document.getElementById("selectUsers").value;
+        loadData(selectTree,selectUsers);
+    }
+
     var items = [
         {
             label: "info",
@@ -69,41 +86,29 @@
 
     var roadmapNodes = null;
 
-    function loadDataNodes(source) {
-        let data = new Array()
-        if (source != null){
-            source.forEach(i => {
-                if (i.children != null){
-                    sub = loadDataNodes(i.children);
-                    if (sub.length>0){
-                        data.push(sub);
-                    }
-                }
-                data.push(i);
-            });
-        }
-        return data.flat(1);
+    function loadData(treeFile, userFile){
+        d3.json("roadmap_data.json", function (error, roadmap) {
+            if (error) throw error;
+            arr = loadDataNodes(roadmap.children);
+            roadmapNodes = new Map(arr.map(i => [i.id, i]));
+
+            d3.json(userFile, function (error, user) {
+                if (error) throw error;
+                let userNodes = new Map(user.children.map(i => [i.id, i]));
+
+                mergeUserNodesData(roadmapNodes, userNodes);
+                d3.json(treeFile, function (error, treeData) {
+                    if (error) throw error;
+                    root = d3.hierarchy(treeData);
+                    root.x0 = 0;
+                    root.y0 = 0;
+                    update(root);
+                });
+            })
+        });
     }
 
-    d3.json("roadmap_data.json", function (error, roadmap) {
-        if (error) throw error;
-        arr = loadDataNodes(roadmap.children);
-        roadmapNodes = new Map(arr.map(i => [i.id, i]));
-
-        d3.json("user.json", function (error, user) {
-            if (error) throw error;
-            let userNodes = new Map(user.children.map(i => [i.id, i]));
-
-            mergeUserNodesData(roadmapNodes, userNodes);
-            d3.json("profile_tree.json", function (error, treeData) {
-                if (error) throw error;
-                root = d3.hierarchy(treeData);
-                root.x0 = 0;
-                root.y0 = 0;
-                update(root);
-            });
-        })
-    });
+    loadData("profile_tree.json","user_chaim.json");
 
 
     div.attr("width", "170px");
@@ -156,56 +161,12 @@
     // declares a tree layout and assigns the size
     let treemap = d3.tree().size([height, width]);
 
-    // Assigns parent, children, height, depth
-    // root = d3.hierarchy(treeData, function (d) {
-    //     return d.children;
-    // });
-    // root.x0 = height / 2;
-    // root.y0 = 0;
-    //
-    // // Collapse after the second level
-    // root.children.forEach(collapse);
-    //
-    // update(root);
-
     // Collapse the node and all it's children
     function collapse(d) {
         if (d.children) {
             d._children = d.children
             d._children.forEach(collapse)
             d.children = null
-        }
-    }
-
-    function getUserStateColor(d, def) {
-        let dataNode = d.data;
-        if (dataNode != null) {
-            if (dataNode.hasOwnProperty("state")) {
-                if (dataNode.state === "done")
-                    return "green";
-                else if (dataNode.state === "start")
-                    return "Aqua";
-                return "black";
-            }
-        }
-        return def;
-    }
-
-    function mergeUserNodesData(roadmap, user) {
-        for (let [id, roadmapItem] of roadmap) {
-            let userItem = user.get(id);
-            mergeUserNodeData(roadmapItem, userItem);
-        }
-    }
-
-    function mergeUserNodeData(roadmap, user) {
-        if (user != null) {
-            let key;
-            for (key in user) {
-                if (user.hasOwnProperty(key)) {
-                    roadmap[key] = user[key];
-                }
-            }
         }
     }
 
@@ -241,10 +202,6 @@
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
             .on('contextmenu', d3.contextmenu(items))
-            // .on('contextmenu', function(){
-            //     d3.event.preventDefault();
-            //     buildMenu(d3.mouse(this)[0], d3.mouse(this)[1]);
-            // });
             .on('click', click);
 
         // Add Circle for the nodes
@@ -291,14 +248,6 @@
                 return d._children ? "PLUM" : getUserStateColor(d, "steelblue");
             })
             .on('contextmenu', d3.contextmenu(items))
-            // .on('contextmenu', function(){
-            //     d3.event.preventDefault();
-            //     a = event.pageY
-            //     b = event.pageX
-            //     c = d3.mouse(this)
-            //     buildMenu(d3.mouse(this)[0], d3.mouse(this)[1]);
-            // });
-
             .attr('cursor', 'pointer')
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
