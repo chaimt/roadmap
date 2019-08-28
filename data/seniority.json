@@ -110,7 +110,7 @@
           "id": "python"
         },
         {
-          "id": "basic_advanced",
+          "id": "spring",
           "children": [
             {
               "id": "spring_reactive"
@@ -124,7 +124,7 @@
           "id": "vertx"
         },
         {
-          "id": "distributed_database",
+          "id": "database",
           "children": [
             {
               "id": "mongodb"

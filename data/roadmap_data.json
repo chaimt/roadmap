@@ -15,6 +15,10 @@
         {
           "id": "application",
           "name": "Application"
+        },
+        {
+          "id": "distributed",
+          "name": "Distributed"
         }
       ]
     },
@@ -78,24 +82,34 @@
       "size": 3812
     },
     {
+      "id": "languages",
+      "name": "Languages",
+      "children": [
+        {
+          "id": "java",
+          "name": "Java"
+        },
+        {
+          "id": "node",
+          "name": "Node"
+        },
+        {
+          "id": "go",
+          "name": "GO"
+        },
+        {
+          "id": "python",
+          "name": "Python"
+        }
+      ]
+    },
+    {
       "id": "rx_java",
       "name": "RX Java"
     },
     {
       "id": "multithread_java",
       "name": "MultiThreading"
-    },
-    {
-      "id": "node",
-      "name": "Node"
-    },
-    {
-      "id": "go",
-      "name": "GO"
-    },
-    {
-      "id": "python",
-      "name": "Python"
     },
     {
       "id": "vertx",
