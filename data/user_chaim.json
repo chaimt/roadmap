@@ -11,14 +11,19 @@
 
     },
     {
-      "id": "spring_batch",
-      "state": "done"
+      "id": "spring",
+      "children": [
+        {
+          "id": "spring_batch",
+          "state": "done"
 
-    },
-    {
-      "id": "spring_cache",
-      "state": "done"
+        },
+        {
+          "id": "spring_cache",
+          "state": "done"
 
+        }
+      ]
     },
 
     {
@@ -27,7 +32,19 @@
     },
     {
       "id": "maven",
-      "state": "done"
+      "state": "done",
+      "knowledge_level" : "high"
+    },
+    {
+      "id": "gradle",
+      "state": "done",
+      "knowledge_level" : "low"
+    },
+    {
+      "id": "rx_java",
+      "state": "done",
+      "knowledge_level" : "med"
     }
+
   ]
 }

@@ -1,25 +1,30 @@
 {
-  "id": "junior",
+  "id": "knowledge",
   "children": [
     {
-      "id": "paradigma",
+      "id": "junior",
       "children": [
         {
-          "id": "imperative",
+          "id": "paradigma",
           "children": [
             {
-              "id": "object_oriented"
-            }
-          ]
-        },
-        {
-          "id": "declarative",
-          "children": [
-            {
-              "id": "functional"
+              "id": "imperative",
+              "children": [
+                {
+                  "id": "object_oriented"
+                }
+              ]
             },
             {
-              "id": "regex"
+              "id": "declarative",
+              "children": [
+                {
+                  "id": "functional"
+                },
+                {
+                  "id": "regex"
+                }
+              ]
             }
           ]
         }
@@ -150,18 +155,11 @@
               "id": "pulsar"
             },
             {
-              "id": "sns"
-            },
-            {
               "id": "kinesis"
             }
           ]
         }
       ]
-    },
-    {
-      "id": "social_skills",
-      "name": "Social Skills"
     }
   ]
 }

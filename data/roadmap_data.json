@@ -57,31 +57,6 @@
       "size": 3812
     },
     {
-      "id": "sql",
-      "name": "SQL",
-      "size": 3812
-    },
-    {
-      "id": "stored_proc",
-      "name": "Stored Proc",
-      "size": 3812
-    },
-    {
-      "id": "indexes",
-      "name": "Indexes",
-      "size": 3812
-    },
-    {
-      "id": "foreign_tables",
-      "name": "Foreign Tables",
-      "size": 3812
-    },
-    {
-      "id": "postgress",
-      "name": "Postgress",
-      "size": 3812
-    },
-    {
       "id": "languages",
       "name": "Languages",
       "children": [
@@ -206,11 +181,19 @@
       "children": [
         {
           "id": "maven",
-          "name": "Maven"
+          "name": "Maven",
+          "tooltip": "Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information",
+          "links": [
+            "https://maven.apache.org/"
+          ]
         },
         {
           "id": "gradle",
-          "name": "Gradle"
+          "name": "Gradle",
+          "tooltip": "From mobile apps to microservices, from small startups to big enterprises, Gradle helps teams build, automate and deliver better software, faster.",
+          "links": [
+            "https://gradle.org/"
+          ]
         },
         {
           "id": "sbt",
@@ -218,7 +201,12 @@
         },
         {
           "id": "mpn",
-          "name": "MPN"
+          "name": "MPN",
+          "tooltip":"Essential JavaScript development tools that help you go to market faster and build powerful applications using modern open source code",
+          "links": [
+            "https://www.npmjs.com/"
+          ]
+
         }
       ]
     },
@@ -227,6 +215,11 @@
       "name": "Database",
       "children": [
         {
+          "id": "postgress",
+          "name": "Postgress",
+          "size": 3812
+        },
+        {
           "id": "db_types",
           "name": "DB Types"
         },
@@ -234,6 +227,31 @@
           "id": "mongodb",
           "name": "MongoDB",
           "size": 3812
+        },
+        {
+          "id": "relational",
+          "name": "Relational DB",
+          "children": [        {
+            "id": "sql",
+            "name": "SQL",
+            "size": 3812
+          },
+            {
+              "id": "stored_proc",
+              "name": "Stored Proc",
+              "size": 3812
+            },
+            {
+              "id": "indexes",
+              "name": "Indexes",
+              "size": 3812
+            },
+            {
+              "id": "foreign_tables",
+              "name": "Foreign Tables",
+              "size": 3812
+            }
+          ]
         },
         {
           "id": "columndb",
