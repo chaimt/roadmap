@@ -1,10 +1,10 @@
 function loadDataNodes(source) {
     let data = new Array()
-    if (source != null){
+    if (source != null) {
         source.forEach(i => {
-            if (i.children != null){
+            if (i.children != null) {
                 sub = loadDataNodes(i.children);
-                if (sub.length>0){
+                if (sub.length > 0) {
                     data.push(sub);
                 }
             }
@@ -18,9 +18,15 @@ function getUserStateColor(d, def) {
     let dataNode = d.data;
     if (dataNode != null) {
         if (dataNode.hasOwnProperty("state")) {
-            if (dataNode.state === "done")
+            if (dataNode.state === "done") {
+                if (dataNode.knowledge_level == "high")
+                    return "DarkGreen";
+                if (dataNode.knowledge_level == "med")
+                    return "DarkOliveGreen";
+                if (dataNode.knowledge_level == "low")
+                    return "DarkSeaGreen";
                 return "green";
-            else if (dataNode.state === "start")
+            } else if (dataNode.state === "start")
                 return "Aqua";
             return "black";
         }
