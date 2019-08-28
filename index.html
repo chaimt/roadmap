@@ -34,7 +34,7 @@
 <body>
 
 <!-- Load d3.js & plugin-->
-<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script type="text/javascript" src="./d3-v4-contextmenu.js"></script>
 <script type="text/javascript" src="./datamodel.js"></script>
@@ -87,18 +87,15 @@
     var roadmapNodes = null;
 
     function loadData(treeFile, userFile){
-        d3.json("./data/roadmap_data.json", function (error, roadmap) {
-            if (error) throw error;
+        d3.json("./data/roadmap_data.json").then(function (roadmap) {
             arr = loadDataNodes(roadmap.children);
             roadmapNodes = new Map(arr.map(i => [i.id, i]));
 
-            d3.json("./data/" + userFile, function (error, user) {
-                if (error) throw error;
+            d3.json("./data/" + userFile).then(function (user) {
                 let userNodes = new Map(user.children.map(i => [i.id, i]));
 
                 mergeUserNodesData(roadmapNodes, userNodes);
-                d3.json("./data/" + treeFile, function (error, treeData) {
-                    if (error) throw error;
+                d3.json("./data/" + treeFile).then(function (treeData) {
                     root = d3.hierarchy(treeData);
                     root.x0 = 0;
                     root.y0 = 0;
