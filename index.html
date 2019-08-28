@@ -87,17 +87,17 @@
     var roadmapNodes = null;
 
     function loadData(treeFile, userFile){
-        d3.json("roadmap_data.json", function (error, roadmap) {
+        d3.json("./data/roadmap_data.json", function (error, roadmap) {
             if (error) throw error;
             arr = loadDataNodes(roadmap.children);
             roadmapNodes = new Map(arr.map(i => [i.id, i]));
 
-            d3.json(userFile, function (error, user) {
+            d3.json("./data/" + userFile, function (error, user) {
                 if (error) throw error;
                 let userNodes = new Map(user.children.map(i => [i.id, i]));
 
                 mergeUserNodesData(roadmapNodes, userNodes);
-                d3.json(treeFile, function (error, treeData) {
+                d3.json("./data/" + treeFile, function (error, treeData) {
                     if (error) throw error;
                     root = d3.hierarchy(treeData);
                     root.x0 = 0;
