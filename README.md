@@ -23,3 +23,10 @@ There are 3 types of files:
       date: when node was updated with last information
       relevance: how important is this node for the roadmap, (int, size of circle will be changed)
       tags: for future use 
+      
+### user attributes      
+      state: state of roadmap per node (start, in_progress, done)
+      knowledge_level: how well do i know the information for this node (low, med, high)
+
+### tree attributes
+      color: color of line from node to parent

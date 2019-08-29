@@ -101,7 +101,7 @@
 
     function loadData(treeFile, userFile) {
         d3.json("./data/roadmap_data.json").then(function (roadmap) {
-            arr = loadDataNodes(roadmap.children);
+            let arr = loadDataNodes(roadmap.children);
             roadmapNodes = new Map(arr.map(i => [i.id, i]));
 
             d3.json("./data/" + userFile).then(function (user) {
@@ -119,7 +119,7 @@
         });
     }
 
-    loadData("profile_tree.json", "user_chaim.json");
+    loadData("tree_profile.json", "user_chaim.json");
 
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
@@ -308,8 +308,12 @@
         // Enter any new links at the parent's previous position.
         let linkEnter = link.enter().insert('path', "g")
             .attr("class", "link")
+            .style("stroke", function (d) {
+                let color = d.data.color == null ? "lightgray" : d.data.color;
+                return color;
+            })
             .attr('d', function (d) {
-                var o = {x: source.x0, y: source.y0}
+                let o = {x: source.x0, y: source.y0}
                 return diagonal(o, o)
             });
 
