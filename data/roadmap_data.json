@@ -6,6 +6,7 @@
       "tooltip": "Backend group",
       "description": "<a href=\"http://en.wikipedia.org/wiki/John_Fife\">Reverend John Fife</a> was instrumental in co-founding the <a href=\"http://en.wikipedia.org/wiki/Sanctuary_movement\">Sanctuary</a> movement. He is also active in humanitarian work along the US/Mexico border through <a />Humane Borders</a>.",
       "date": "2012-05-05 23:50:11",
+      "relevance": 2,
       "tags": []
     },
     {
@@ -149,7 +150,8 @@
       "children": [
         {
           "id": "spring_reactive",
-          "name": "Reactor"
+          "name": "Reactor",
+          "relevance": 2
         },
         {
           "id": "spring_actuator",
