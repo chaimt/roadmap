@@ -26,6 +26,40 @@
               ]
             }
           ]
+        },
+        {
+          "id": "best_practices",
+
+          "children": [
+            {
+              "id": "testing"
+            },
+            {
+              "id": "testing_exercise"
+            }
+          ]
+        },
+        {
+          "id": "database",
+          "children": [
+            {
+              "id": "relational_exercise"
+            }
+          ]
+        },
+        {
+          "id": "queue",
+          "children": [
+            {
+              "id": "queue_exercise"
+            },
+            {
+              "id": "kafka"
+            },
+            {
+              "id": "pulsar"
+            }
+          ]
         }
       ]
     }
