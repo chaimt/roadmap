@@ -216,6 +216,14 @@
               "name": "gradle",
               "ref": "https://gradle.org/"
             }
+          ],
+          "children": [
+            {
+              "id": "gradle_exercise",
+              "name": "Gradle Exercise",
+              "type": "exercise",
+              "description": "<p><ul>\n<li>Build tool that also tries to do many other things (like manage web sites)</li>\n<li>Favors convention (with configuration) over explicit rules\n<ul>\n<li>\"Build me a jar out of stuff in src/main/java\" vs</li>\n<li>\"Run&nbsp;<code>javac</code>&nbsp;if these files change, then run&nbsp;<code>jar cf foo.jar</code>\"</li>\n</ul>\n</li>\n<li>Based on a plugin architecture to allow extensibility</li>\n<li>Executes a series of build phases (\"lifecycle stages\")</li>\n</ul></p>"
+            }
           ]
         },
         {

@@ -28,6 +28,17 @@
         pointer-events: none;
     }
 
+    div.example {
+        position: absolute;
+        text-align: center;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+
     div.links {
         position: absolute;
         text-align: center;
@@ -249,6 +260,7 @@
             .on('contextmenu', d3.contextmenu(items))
             .on('click', click);
 
+
         // Add Circle for the nodes
         nodeEnter.append('circle')
             .attr('class', 'node')
@@ -261,33 +273,55 @@
             });
 
         // Add labels for the nodes
-        if (graphDirection == 'vertical'){
-            nodeEnter.append('text')
-                .attr("dy", ".35em")
+        let textNode = nodeEnter.append('text')
+            .attr("dy", ".35em");
+        if (graphDirection == 'vertical') {
+            textNode
                 .attr("y", function (d) {
-                    return d.children || d._children ? -20 : 20;
+                    return d.children || d._children ? -10 : 10;
                 })
-                .attr("text-anchor", "middle")
-                .text(function (d) {
-                    return d.data.name != null ? d.data.name : d.data.id + "[missing]";
-                });
-        }
-        else{
-            nodeEnter.append('text')
-                .attr("dy", ".35em")
+                .attr("text-anchor", "middle");
+        } else {
+            textNode
                 .attr("x", function (d) {
                     return d.children || d._children ? -13 : 13;
                 })
                 .attr("text-anchor", function (d) {
                     return d.children || d._children ? "end" : "start";
-                })
-                .text(function (d) {
-                    return d.data.name != null ? d.data.name : d.data.id + "[missing]";
                 });
+
         }
+        textNode.text(function (d) {
+            return d.data.name != null ? d.data.name : d.data.id + "[missing]";
+        });
 
+        exercise = nodeEnter
+            .filter(function(d) {
+                if (d.data.type == "exercise") {
+                    return true; //This item will be included in the selection
+                } else {
+                    return false;
+                }
+            });
+        exercise
+            .append('rect')
+            // .attr('class', 'node')
+            .attr('x', 50)
+            .attr('width', 100)
+            .attr('height', 40)
+            .attr('stroke', 'black')
+            .attr('fill', 'gold');
 
-
+        exercise
+            .append('text')
+            .attr('x', 70)
+            .attr("text-anchor", "middle")
+            .attr("dy", ".35em")
+            .attr('stroke', 'black')
+            .text("chaim");
+            // .text(function (d) {
+            //     return d.data.description != null ? d.data.description : d.data.id + "[missing]";
+            // })
 
         // UPDATE
         let nodeUpdate = nodeEnter.merge(node);

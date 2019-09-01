@@ -18,7 +18,12 @@
               ]
             },
             {
-              "id": "gradle"
+              "id": "gradle",
+              "children": [
+                {
+                  "id": "gradle_exercise"
+                }
+              ]
             }
           ]
         }
