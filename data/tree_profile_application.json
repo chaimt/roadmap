@@ -1,0 +1,28 @@
+{
+  "id": "application",
+  "children": [
+    {
+      "id": "languages",
+      "tooltip": "Pick a language",
+      "children": [
+        {
+          "id": "build_systems",
+          "tooltip": "Learn how to use package manager",
+          "children": [
+            {
+              "id": "maven",
+              "children": [
+                {
+                  "id": "maven_exercise"
+                }
+              ]
+            },
+            {
+              "id": "gradle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

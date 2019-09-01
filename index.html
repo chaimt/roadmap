@@ -49,23 +49,34 @@
 <script type="text/javascript" src="./datamodel.js"></script>
 
 <div id="div_file">
-    <select id="selectTree" onchange="myFunction()">
+    <select id="selectTree" onchange="customizeGraph()">
         <option value="tree_profile.json">Profiles</option>
+        <option value="tree_profile_application.json">Profile Application</option>
         <option value="tree_seniority.json">Seniority</option>
     </select>
-    <select id="selectUsers" onchange="myFunction()">
+    <select id="selectUsers" onchange="customizeGraph()">
         <option value="user_chaim.json">Chaim</option>
         <option value="user_yoav.json">Yoav</option>
+    </select>
+    <select id="selectDirection" onchange="customizeGraph()">
+        <option value="vertical">vertical</option>
+        <option value="horizontal">horizontal</option>
+    </select>
+    <select id="selectPlatform" onchange="customizeGraph()">
+        <option value="None">None</option>
+        <option value="Java">Java</option>
+        <option value="Python">Python</option>
     </select>
 </div>
 <!-- Create a div where the graph will take place -->
 <div id="div_template"></div>
 
 <script>
-    function myFunction() {
+    function customizeGraph() {
         let selectTree = document.getElementById("selectTree").value;
         let selectUsers = document.getElementById("selectUsers").value;
-        loadData(selectTree, selectUsers);
+        let selectDirection = document.getElementById("selectDirection").value;
+        loadData(selectTree, selectUsers, selectDirection);
     }
 
     var items = [
@@ -102,13 +113,15 @@
     ];
 
     // Set the dimensions and margins of the diagram
-    var margin = {top: 20, right: 90, bottom: 30, left: 90},
+    var margin = {top: 30, right: 90, bottom: 30, left: 90},
         width = 1960 - margin.left - margin.right,
         height = 1300 - margin.top - margin.bottom;
 
     var roadmapNodes = null;
+    var graphDirection = null;
 
-    function loadData(treeFile, userFile) {
+    function loadData(treeFile, userFile, direction) {
+        graphDirection = direction;
         d3.json("./data/roadmap_data.json").then(function (roadmap) {
             let arr = loadDataNodes(roadmap.children);
             roadmapNodes = new Map(arr.map(i => [i.id, i]));
@@ -248,17 +261,33 @@
             });
 
         // Add labels for the nodes
-        nodeEnter.append('text')
-            .attr("dy", ".35em")
-            .attr("x", function (d) {
-                return d.children || d._children ? -13 : 13;
-            })
-            .attr("text-anchor", function (d) {
-                return d.children || d._children ? "end" : "start";
-            })
-            .text(function (d) {
-                return d.data.name != null ? d.data.name : d.data.id + "[missing]";
-            });
+        if (graphDirection == 'vertical'){
+            nodeEnter.append('text')
+                .attr("dy", ".35em")
+                .attr("y", function (d) {
+                    return d.children || d._children ? -20 : 20;
+                })
+                .attr("text-anchor", "middle")
+                .text(function (d) {
+                    return d.data.name != null ? d.data.name : d.data.id + "[missing]";
+                });
+        }
+        else{
+            nodeEnter.append('text')
+                .attr("dy", ".35em")
+                .attr("x", function (d) {
+                    return d.children || d._children ? -13 : 13;
+                })
+                .attr("text-anchor", function (d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function (d) {
+                    return d.data.name != null ? d.data.name : d.data.id + "[missing]";
+                });
+        }
+
+
+
 
         // UPDATE
         let nodeUpdate = nodeEnter.merge(node);
@@ -267,7 +296,10 @@
         nodeUpdate.transition()
             .duration(duration)
             .attr("transform", function (d) {
-                return "translate(" + d.y + "," + d.x + ")";
+                if (graphDirection == 'vertical')
+                    return "translate(" + d.x + "," + d.y + ")";
+                else
+                    return "translate(" + d.y + "," + d.x + ")";
             });
 
         // Update the node attributes and style
@@ -294,7 +326,10 @@
         let nodeExit = node.exit().transition()
             .duration(duration)
             .attr("transform", function (d) {
-                return "translate(" + source.y + "," + source.x + ")";
+                if (graphDirection == 'vertical')
+                    return "translate(" + source.x + "," + source.y + ")";
+                else
+                    return "translate(" + source.y + "," + source.x + ")";
             })
             .remove();
 
@@ -354,11 +389,17 @@
 
         // Creates a curved (diagonal) path from parent to the child nodes
         function diagonal(s, d) {
-
-            path = `M ${s.y} ${s.x}
+            if (graphDirection == 'vertical') {
+                path = `M ${s.x} ${s.y}
+            C ${(s.x + d.x) / 2} ${s.y},
+              ${(s.x + d.x) / 2} ${d.y},
+              ${d.x} ${d.y}`
+            } else {
+                path = `M ${s.y} ${s.x}
             C ${(s.y + d.y) / 2} ${s.x},
               ${(s.y + d.y) / 2} ${d.x},
               ${d.y} ${d.x}`
+            }
 
             return path
         }
