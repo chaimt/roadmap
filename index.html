@@ -36,7 +36,6 @@
         background: red;
         border: 0px;
         border-radius: 8px;
-        pointer-events: none;
     }
 
 </style>
@@ -75,17 +74,27 @@
             items: [
                 {
                     label: "links",
-                    onClick: function () {
+                    onClick: function (d) {
+                        let nodeLinks = d.data.links;
+                        if (nodeLinks != null) {
+                            links.transition()
+                                .duration(200)
+                                .style("opacity", .6);
+                            links.transition()
+                                .duration(800)
+                                .style("opacity", .9);
+                            let linkList = nodeLinks.map(link => `<li><a href="${link.ref}" target="_blank">${link.name}</a><br /></li>`);
 
-                        links.transition()
-                            .duration(200)
-                            .style("opacity", .6);
-                        links.transition()
-                            .duration(800)
-                            .style("opacity", .9);
-                        links.html('<a href= "https://google.com" target="_blank"> click me now</a>')
-                            .style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY - 28) + "px");
+                            links.html('<p>\n' +
+                                'Additional Links:<br />\n' +
+                                '<ul>' +
+                                linkList +
+                                '</ul>' +
+                                '</p>'
+                            )
+                                .style("left", (d3.event.pageX) + "px")
+                                .style("top", (d3.event.pageY - 18) + "px");
+                        }
                     }
                 },
             ]
@@ -263,9 +272,10 @@
 
         // Update the node attributes and style
         nodeUpdate.select('circle.node')
-            .attr("r", function(d) {
+            .attr("r", function (d) {
                 let relevance = d.data.relevance == null ? 0 : d.data.relevance;
-                return 10 + relevance; })
+                return 10 + relevance;
+            })
             // .attr('r', 10)
             .style("fill", function (d) {
                 return getUserStateColor(d, "#fff");

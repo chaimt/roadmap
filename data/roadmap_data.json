@@ -163,7 +163,10 @@
           "size": 3812,
           "tooltip": "A lightweight, comprehensive batch framework designed to enable the development of robust batch applications vital for the daily operations of enterprise systems.",
           "links": [
-            "https://spring.io/projects/spring-batch"
+            {
+              "name": "spring-batch",
+              "ref": "https://spring.io/projects/spring-batch"
+            }
           ]
         },
         {
@@ -186,7 +189,14 @@
           "name": "Maven",
           "tooltip": "Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information",
           "links": [
-            "https://maven.apache.org/"
+            {
+              "name": "maven",
+              "ref": "https://maven.apache.org/"
+            },
+            {
+              "name": "overview",
+              "ref": "https://www.tutorialspoint.com/maven/maven_overview.htm"
+            }
           ]
         },
         {
@@ -194,7 +204,10 @@
           "name": "Gradle",
           "tooltip": "From mobile apps to microservices, from small startups to big enterprises, Gradle helps teams build, automate and deliver better software, faster.",
           "links": [
-            "https://gradle.org/"
+            {
+              "name": "gradle",
+              "ref": "https://gradle.org/"
+            }
           ]
         },
         {
@@ -204,11 +217,13 @@
         {
           "id": "mpn",
           "name": "MPN",
-          "tooltip":"Essential JavaScript development tools that help you go to market faster and build powerful applications using modern open source code",
+          "tooltip": "Essential JavaScript development tools that help you go to market faster and build powerful applications using modern open source code",
           "links": [
-            "https://www.npmjs.com/"
+            {
+              "name": "npmjs",
+              "ref": "https://www.npmjs.com/"
+            }
           ]
-
         }
       ]
     },
@@ -233,11 +248,12 @@
         {
           "id": "relational",
           "name": "Relational DB",
-          "children": [        {
-            "id": "sql",
-            "name": "SQL",
-            "size": 3812
-          },
+          "children": [
+            {
+              "id": "sql",
+              "name": "SQL",
+              "size": 3812
+            },
             {
               "id": "stored_proc",
               "name": "Stored Proc",
